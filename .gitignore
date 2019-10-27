@@ -1,0 +1,6 @@
+.idea
+__pycache__
+build
+dist
+log.log
+tkinter_test.spec
