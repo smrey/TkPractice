@@ -8,16 +8,17 @@ import tkinter as tk
 class Tester:
 
     def __init__(self):
+        self.root = tk.Tk()
+        self.root.grid()
+        self.root.but = tk.Button(self.root, text='mee')
+        self.root.but.grid(column=0, row=2, sticky='EW')
+        self.root.update()
+
         # Initialise an instance of the module logger
-        self.ml = ModuleLogger()
+        self.ml = ModuleLogger(self.root)
         self.log = self.ml.module_logger
         self.popup = self.ml.my_message
-        # Create dictionary to hold information extracted from the sources
-        self.info_dict = {}
-        self.status = ""
-        self.authoriser = ""
-        self.worksheet = ""
-        self.sample = ""
+
 
     def handle_exception(self, exc_type, exc_value, exc_traceback):
         # Debug is used as this type of error cannot be attempted to be passed to the popup as will happen with
@@ -27,7 +28,7 @@ class Tester:
         self.log.critical(f"[CRITICAL ERROR]: {exc_value}. See bioinformatics team for support [CRITICAL ERROR]")
         self.log.critical("\n")
         self.log.critical("****[ERROR] PDF AND XML FILE HAVE NOT BEEN CORRECTLY GENERATED [ERROR]****")
-        self.popup.mainloop()
+        self.root.mainloop()
 
     def test_stuff(self):
         print("starting")
@@ -35,15 +36,15 @@ class Tester:
         self.log.info("hiya")
         time.sleep(2)
         #raise Exception("Huge problemo")
-        self.popup.mainloop()
+        self.root.mainloop()
 
 class ModuleLogger:
 
-    def __init__(self):
+    def __init__(self, ttt):
         # Create pop-up box
-        from message_box import MessageBox, MyHandlerText, MyEntryWindow
-        self.my_message = MessageBox(None)
-        self.my_message.wm_title("CRUK Generator")
+        from message_box import MessageBox, MyHandlerText
+        self.my_message = MessageBox(ttt)
+        #self.my_message.wm_title("CRUK Generator")
         self.module_logger = logging.getLogger(__name__)
         self.module_logger.setLevel(logging.DEBUG)
 
@@ -63,8 +64,10 @@ class ModuleLogger:
         self.module_logger.addHandler(file_handler)
 
         # TODO Placed weirdly for testing
-        m = MyEntryWindow(self.my_message)
+        #from message_box import MyEntryWindow
+        #m = MyEntryWindow(self.my_message)
         #self.my_message.wait_window(m.top)
+
 
 
 def main():
