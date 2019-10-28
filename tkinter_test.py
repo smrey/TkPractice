@@ -40,10 +40,10 @@ class Tester:
 
 class ModuleLogger:
 
-    def __init__(self, ttt):
+    def __init__(self, parent_window):
         # Create pop-up box
         from message_box import MessageBox, MyHandlerText
-        self.my_message = MessageBox(ttt)
+        self.my_message = MessageBox(parent_window)
         #self.my_message.wm_title("CRUK Generator")
         self.module_logger = logging.getLogger(__name__)
         self.module_logger.setLevel(logging.DEBUG)
@@ -59,14 +59,14 @@ class ModuleLogger:
         #self.module_logger.addHandler(stdout_handler)
 
         # Create handler to route messages to file
-        file_handler = logging.FileHandler(os.path.join(os.getcwd(),"log.log"))
+        file_handler = logging.FileHandler(os.path.join(os.getcwd(), "log.log"))
         file_handler.setLevel(logging.DEBUG)
         self.module_logger.addHandler(file_handler)
 
         # TODO Placed weirdly for testing
-        #from message_box import MyEntryWindow
-        #m = MyEntryWindow(self.my_message)
-        #self.my_message.wait_window(m.top)
+        from message_box import MyEntryWindow
+        entering_data = MyEntryWindow(parent_window)
+        #parent_window.wait_window(entering_data)
 
 
 
