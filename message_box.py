@@ -91,11 +91,10 @@ class MyEntryWindow(Dialog):
         return self.e1 # Intial focus will be here
 
     def apply(self):
-        sample = self.e1.get()
-        worksheet = self.e2.get()
-        authoriser = self.e3.get()
-        status = self.e4.get()
-        print(sample, worksheet, authoriser, status)
+        self.sample = self.e1.get()
+        self.worksheet = self.e2.get()
+        self.authoriser = self.e3.get()
+        self.status = self.e4.get()
 
     def entry_button_callback(self, event):
         self.destroy()
@@ -103,10 +102,10 @@ class MyEntryWindow(Dialog):
 
 class MessageBox:
 
-    def __init__(self, box):
-        self.top = tk.Toplevel(box)
+    def __init__(self, parent):
+        self.top = tk.Toplevel(parent)
         self.top.grid()
-        self.top.wm_title("CRUK Generator")
+        self.top.wm_title("CRUK Generator Log")
         self.mybutton = tk.Button(self.top, text="OK")
         self.mybutton.grid(column=0, row=2, sticky='EW')
         self.mybutton.bind("<ButtonRelease-1>", self.button_callback)
@@ -116,24 +115,6 @@ class MessageBox:
     def button_callback(self, event):
         self.top.destroy()
 
-'''
-class MessageBox(Dialog):
-
-    def body(self, master):
-        self.grid()
-        self.wm_title("CRUK Generator Log")
-        self.mybutton = tk.Button(master, text="OK")
-        self.mybutton.grid(column=0, row=2, sticky='EW')
-        self.mybutton.bind("<ButtonRelease-1>", self.button_callback)
-        self.popup_text = tk.Text(master, state="disabled")
-        self.popup_text.grid(column=0, row=1)
-
-    def buttonbox(self):
-        pass
-
-    def button_callback(self, event):
-        self.destroy()
-'''
 
 class MyHandlerText(logging.StreamHandler):
     def __init__(self, textctrl):
@@ -147,8 +128,10 @@ class MyHandlerText(logging.StreamHandler):
         self.flush()
         self.textctrl.config(state="disabled")
 
+
 def main():
     print("Cannot be run")
+
 
 if __name__ == '__main__':
     main()
