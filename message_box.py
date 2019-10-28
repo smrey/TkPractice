@@ -2,40 +2,29 @@ import tkinter as tk
 from tkinter import ttk
 import logging
 
+
 class Dialog(tk.Toplevel):
 
     def __init__(self, parent, title=None):
         tk.Toplevel.__init__(self, parent)
         self.transient(parent)
-
         if title:
             self.title(title)
-
         self.parent = parent
-
         self.result = None
-
         body = tk.Frame(self)
         self.initial_focus = self.body(body)
         body.pack(padx=5, pady=5)
-
         self.buttonbox()
-
         self.grab_set()
-
         if not self.initial_focus:
             self.initial_focus = self
-
         self.protocol("WM_DELETE_WINDOW", self.cancel)
-
         self.geometry("+%d+%d" % (parent.winfo_rootx() + 50,
                                     parent.winfo_rooty() + 50))
-
         self.initial_focus.focus_set()
-
         self.wait_window(self)
 
-    #
     # construction hooks
     def body(self, master):
         # create dialog body.  return widget that should have
@@ -45,30 +34,23 @@ class Dialog(tk.Toplevel):
     def buttonbox(self):
         # add standard button box. override if you don't want the
         # standard buttons
-
         box = tk.Frame(self)
         w = tk.Button(box, text="OK", width=10, command=self.ok, default=tk.ACTIVE)
         w.pack(side=tk.LEFT, padx=5, pady=5)
         w = tk.Button(box, text="Cancel", width=10, command=self.cancel)
         w.pack(side=tk.LEFT, padx=5, pady=5)
-
         self.bind("<Return>", self.ok)
         self.bind("<Escape>", self.cancel)
-
         box.pack()
 
-    #
     # standard button semantics
     def ok(self, event=None):
         if not self.validate():
             self.initial_focus.focus_set()  # put focus back
             return
-
         self.withdraw()
         self.update_idletasks()
-
         self.apply()
-
         self.cancel()
 
     def cancel(self, event=None):
@@ -76,7 +58,6 @@ class Dialog(tk.Toplevel):
         self.parent.focus_set()
         self.destroy()
 
-    #
     # command hooks
     def validate(self):
         return 1  # override
@@ -88,7 +69,7 @@ class Dialog(tk.Toplevel):
 class MyEntryWindow(Dialog):
     def body(self, master):
         self.grid()
-        self.wm_title("CRUK Generator")
+        self.wm_title("CRUK Generator Data Entry")
         master.grid()
         self.label1 = ttk.Label(master, text="Enter sample identifier")
         self.label1.grid(column=0, row=0)
@@ -107,9 +88,6 @@ class MyEntryWindow(Dialog):
         self.label4.grid(column=0, row=3)
         self.e4 = ttk.Entry(master)
         self.e4.grid(column=1, row=3, pady=10)
-        #self.entry_button = ttk.Button(master, text="Entered stuff")
-        #self.entry_button.grid(column=2, row=0)
-        #self.entry_button.bind("<ButtonRelease-1>", self.entry_button_callback)
         return self.e1 # Intial focus will be here
 
     def apply(self):
@@ -123,15 +101,11 @@ class MyEntryWindow(Dialog):
         self.destroy()
 
 
-class MessageBox: # Putting tk.Tk here makes an additional popup generic tk box
+class MessageBox:
 
     def __init__(self, box):
-        #tk.Tk.__init__(self, None)
-        #self.box = box
         self.top = tk.Toplevel(box)
         self.top.grid()
-        # Places popup in middle of screen
-        #self.eval('tk::PlaceWindow %s center' % self.winfo_pathname(self.winfo_toplevel()))
         self.top.wm_title("CRUK Generator")
         self.mybutton = tk.Button(self.top, text="OK")
         self.mybutton.grid(column=0, row=2, sticky='EW')
@@ -139,30 +113,26 @@ class MessageBox: # Putting tk.Tk here makes an additional popup generic tk box
         self.popup_text = tk.Text(self.top, state="disabled")
         self.popup_text.grid(column=0, row=1)
 
-        #self.tk = tk
-
     def button_callback(self, event):
         self.top.destroy()
+
 '''
+class MessageBox(Dialog):
 
-class MyEntryWindow:
+    def body(self, master):
+        self.grid()
+        self.wm_title("CRUK Generator Log")
+        self.mybutton = tk.Button(master, text="OK")
+        self.mybutton.grid(column=0, row=2, sticky='EW')
+        self.mybutton.bind("<ButtonRelease-1>", self.button_callback)
+        self.popup_text = tk.Text(master, state="disabled")
+        self.popup_text.grid(column=0, row=1)
 
-    def __init__(self, parent):
-        #tk.Tk.__init__(self, None)
-        self.top = tk.Toplevel(parent)
-        self.top.grid()
-        self.top.grab_set()
-        self.label = ttk.Label(self.top, text="Do something!")
-        self.label.grid(column=0, row=0)
-        self.e = ttk.Entry(self.top)
-        self.e.grid(column=1, row=0, pady=10)
-        self.entry_button = ttk.Button(self.top, text="Entered stuff")
-        self.entry_button.grid(column=2, row=0)
-        self.entry_button.bind("<ButtonRelease-1>", self.entry_button_callback)
+    def buttonbox(self):
+        pass
 
-    def entry_button_callback(self, event):
-        self.top.destroy()
-        return self.e
+    def button_callback(self, event):
+        self.destroy()
 '''
 
 class MyHandlerText(logging.StreamHandler):
